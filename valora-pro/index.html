@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VALORA Pro - Plataforma Inmobiliaria">
+  <title>VALORA Pro</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+<input type="file" id="fXls" accept=".xlsx,.xls" style="position:fixed;opacity:0;width:0;height:0">
+<input type="file" id="fSvg" accept=".svg" style="position:fixed;opacity:0;width:0;height:0">
+<div class="login" id="loginView">
+  <div class="lfc lfc-1"><div class="fc-hd"><span class="fc-lbl">Lotes gestionados</span><div class="fc-ic g"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div></div><div class="fc-num" id="fcNum">0</div><div class="fc-delta"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6,15 12,9 18,15"/></svg>+12.4% este mes</div></div>
+  <div class="lfc lfc-2"><div class="fc-hd"><span class="fc-lbl">Conversión trimestral</span><div class="fc-ic b"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div></div><div class="fc-bars"><div class="fc-bar" style="height:33%"></div><div class="fc-bar" style="height:52%"></div><div class="fc-bar" style="height:44%"></div><div class="fc-bar" style="height:72%"></div><div class="fc-bar" style="height:86%"></div><div class="fc-bar" style="height:98%"></div></div></div>
+  <div class="lfc lfc-3"><div class="fc-hd"><span class="fc-lbl">Manzana H Etapa 15</span><div class="fc-ic a"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="1,6 9,3 15,6 23,3 23,18 15,21 9,18 1,21"/></svg></div></div><div class="fc-grid" id="fcGrid"></div></div>
+  <div class="lcon">
+    <div class="ltop"><div id="lBrandLogo"></div><span class="ltop-name">VALORA</span><span class="ltop-tag">Plataforma SaaS</span></div>
+    <div class="lmain">
+      <div class="lhero">
+        <h1 class="lhero-h">Gestiona tu desarrollo<br>inmobiliario con<br><b>inteligencia comercial</b></h1>
+        <p class="lhero-p">Plataforma todo-en-uno para visualizar lotes, controlar disponibilidad y tomar decisiones basadas en datos en tiempo real.</p>
+        <div class="lstats"><div class="lst"><div class="lst-n">+500</div><div class="lst-l">Proyectos</div></div><div class="lst-sep"></div><div class="lst"><div class="lst-n">150k</div><div class="lst-l">Lotes</div></div><div class="lst-sep"></div><div class="lst"><div class="lst-n">99.9%</div><div class="lst-l">Uptime</div></div></div>
+      </div>
+      <div class="lcard">
+        <div class="lcard-hd"><div id="lCardLogo"></div><span class="lcard-bname">VALORA</span></div>
+        <h2 class="lcard-h">Bienvenido</h2>
+        <p class="lcard-sub">Ingresa con tu cuenta corporativa para continuar</p>
+        <div class="lf-field"><label class="lf-label">Correo corporativo</label><input class="lf-input" id="logEmail" type="email" placeholder="ventas@inmobiliaria.com" value="demo@valora.com"></div>
+        <div class="lf-field"><label class="lf-label">Contrasena</label><input class="lf-input" id="logPass" type="password" placeholder="..." value="demo"></div>
+        <div class="lf-row"><label class="lf-check"><input type="checkbox" checked> Mantener sesion</label><a class="lf-link">Olvidaste tu contrasena</a></div>
+        <button class="lf-submit" onclick="doLogin()">Iniciar sesion</button>
+        <div class="lf-or"><span>o</span></div>
+        <button class="lf-guest" onclick="doLogin(true)">Continuar como invitado</button>
+        <p class="lcard-foot">2026 VALORA Plataforma Inteligente de Gestion Inmobiliaria</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="shell" id="appShell" style="display:none">
+  <nav class="nav">
+    <div class="nav-mark" id="navMark" onclick="switchView('dash')"></div>
+    <div class="nav-items">
+      <button class="nav-i on" data-view="dash" onclick="switchView('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="nav-tt">Dashboard</span></button>
+      <button class="nav-i" data-view="map" onclick="switchView('map')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1,6 9,3 15,6 23,3 23,18 15,21 9,18 1,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg><span class="nav-tt">Visualizador</span></button>
+      <button class="nav-i" data-view="hist" onclick="switchView('hist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg><span class="nav-tt">Actividad</span></button>
+    </div>
+    <div class="nav-bot">
+      <button class="nav-theme" onclick="toggleTheme()" id="themeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <div class="nav-user" id="navUser" onclick="doLogout()" title="Cerrar sesion">DU</div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="tbar">
+      <div class="crumb"><div class="crumb-brand"><span id="tbLogo"></span><span>VALORA</span></div><span class="crumb-sep">/</span><span class="crumb-cur" id="crumbCur">Dashboard</span></div>
+      <div class="tbar-srch"><input id="srchIn" placeholder="Buscar lote..." onkeydown="if(event.key==='Enter')doSearch()"></div>
+      <div class="tbar-acts">
+        <label for="fXls" class="tb-btn" id="upXls"><span class="tb-btn-dot"></span>Excel</label>
+        <label for="fSvg" class="tb-btn" id="upSvg"><span class="tb-btn-dot"></span>SVG</label>
+        <button class="tb-btn" onclick="openSet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.18V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.52 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <button class="tb-btn" onclick="openTbl()">Datos</button>
+        <button class="tb-btn prim" id="expBtn" onclick="exportXL()" style="display:none">Exportar</button>
+      </div>
+    </div>
+    <div class="view" id="dashView">
+      <div class="dash">
+        <div class="dash-hd"><div class="dash-greet"><h1 id="greetTxt">Hola</h1><p id="dateTxt"></p></div><div class="dash-actions"><button class="tb-btn" onclick="switchView('map')">Ver plano</button><button class="tb-btn prim" onclick="openSet()">Cargar proyecto</button></div></div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="quick">
+          <div class="q-card" onclick="switchView('map')"><div class="q-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1,6 9,3 15,6 23,3 23,18 15,21 9,18 1,21"/></svg></div><div><div class="q-tx">Visualizador</div><div class="q-sub">Ver plano interactivo</div></div></div>
+          <div class="q-card" onclick="openSet()"><div class="q-ic" style="background:var(--grn-bg);color:var(--grn-tx)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div><div class="q-tx">Cargar datos</div><div class="q-sub">Excel + plano SVG</div></div></div>
+          <div class="q-card" onclick="switchView('hist')"><div class="q-ic" style="background:var(--vio-bg);color:var(--vio-tx)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div><div><div class="q-tx">Historial</div><div class="q-sub">Cambios recientes</div></div></div>
+          <div class="q-card" onclick="openTbl()"><div class="q-ic" style="background:var(--amb-bg);color:var(--amb-tx)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div><div class="q-tx">Tabla de datos</div><div class="q-sub">Editar registros</div></div></div>
+        </div>
+        <div class="dash-row">
+          <div class="panel"><div class="panel-hd"><div><div class="panel-ttl">Distribucion por estado</div><div class="panel-sub" id="distSub">Sin datos</div></div></div><div class="panel-bd" id="distBody"><div class="feed-empty">Carga un Excel para ver la distribucion</div></div></div>
+          <div class="panel"><div class="panel-hd"><div><div class="panel-ttl">Actividad reciente</div><div class="panel-sub">Ultimas acciones</div></div><button class="tb-btn" onclick="switchView('hist')" style="font-size:11px;padding:0 9px;height:26px">Ver todo</button></div><div class="panel-bd"><div class="feed" id="feedBody"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="view" id="mapView" style="display:none">
+      <div class="map-view">
+        <div class="fp" id="fp">
+          <div class="fp-hd" id="fpDrag">
+            <svg class="fp-grip" viewBox="0 0 10 16" width="10" height="16" fill="currentColor"><circle cx="2.5" cy="3" r="1.5"/><circle cx="7.5" cy="3" r="1.5"/><circle cx="2.5" cy="8" r="1.5"/><circle cx="7.5" cy="8" r="1.5"/><circle cx="2.5" cy="13" r="1.5"/><circle cx="7.5" cy="13" r="1.5"/></svg>
+            <span class="fp-ttl">Panel de control</span>
+            <button class="fp-cbtn" id="fpColBtn" onclick="toggleFP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="15,18 9,12 15,6"/></svg></button>
+          </div>
+          <div class="fp-body" id="fpBody">
+            <div class="side-mini-kpi" id="miniKpis"></div>
+            <div class="tabs" id="tabs" style="display:none"></div>
+            <div class="legend" id="lgBody"></div>
+            <div class="side-ft"><button class="clr-btn" id="clrBtn" onclick="clearFilter()">Limpiar filtro activo</button></div>
+          </div>
+        </div>
+        <div class="vp-wrap">
+          <div class="vp" id="vp">
+            <div class="canvas" id="canvas"><div class="mapEl" id="mapEl"></div></div>
+            <div class="fbadge" id="fbadge"><span id="fbLbl"></span><button onclick="clearFilter()">x</button></div>
+            <div class="empty" id="empty">
+              <div class="empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="1,6 9,3 15,6 23,3 23,18 15,21 9,18 1,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></div>
+              <h2>Carga tu plano SVG</h2>
+              <p>Sube el Excel con datos de lotes y el plano SVG para comenzar a visualizar.</p>
+              <div class="empty-btns"><label for="fXls" class="tb-btn prim">Cargar Excel</label><label for="fSvg" class="tb-btn eb-sec">Cargar SVG</label></div>
+            </div>
+            <div class="ctrl" id="ctrl">
+              <div class="cg"><button class="cb" onclick="dz(1.2)" title="Acercar">+</button><div class="clbl" id="zlbl">100</div><button class="cb" onclick="dz(.83)" title="Alejar">-</button></div>
+              <div class="cg"><button class="cb" onclick="refit()">o</button><button class="cb" onclick="doRot(-90)">r</button><button class="cb" onclick="doRot(90)">R</button></div>
+            </div>
+            <div class="loader" id="loader"><div class="spin"></div><p id="loaderTxt">Procesando...</p></div>
+            <aside class="dp" id="dp">
+              <div class="dp-hd"><button class="dp-x" onclick="closeDP()">x</button><div class="dp-tag">Lote</div><div class="dp-id" id="dpId">-</div><div class="dp-st"><span class="dp-st-dot" id="dpStDot"></span><span id="dpSt">-</span></div></div>
+              <select class="dp-sel" id="dpSel" onchange="changeSt(this)"></select>
+              <div class="dp-body" id="dpBody"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="view" id="histView" style="display:none">
+      <div class="hist"><div class="hist-hd"><h1>Historial de actividad</h1><p>Registro de cambios y acciones realizadas en el proyecto</p></div><div id="histBody"></div></div>
+    </div>
+  </div>
+</div>
+<div class="tt" id="tt"><div class="tt-top"><div class="tt-dot" id="ttDot"></div><div><div class="tt-id" id="ttId"></div><div class="tt-es" id="ttEst"></div></div></div><div id="ttB"></div></div>
+<div class="mask" id="setMask" onclick="if(event.target===this)closeSet()">
+  <div class="modal">
+    <div class="modal-hd"><h2>Configuracion del proyecto</h2><button class="tb-btn" onclick="closeSet()">x</button></div>
+    <div class="modal-bd">
+      <div class="sec"><div class="sec-t">Archivos del proyecto</div>
+        <label for="fXls" class="ufc" id="scXls"><div class="ufc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div class="ufc-tx"><h4>Excel de Lotes</h4><p id="scXlsSt">Haz clic para cargar</p></div></label>
+        <label for="fSvg" class="ufc" id="scSvg"><div class="ufc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="1,6 9,3 15,6 23,3 23,18 15,21 9,18 1,21"/></svg></div><div class="ufc-tx"><h4>Plano SVG</h4><p id="scSvgSt">Haz clic para cargar</p></div></label>
+      </div>
+      <div class="sec" id="colSec" style="display:none">
+        <div class="sec-t">Mapeo de columnas</div>
+        <div class="fr"><span class="fl">ID Lote</span><select class="fsel" id="cId" onchange="rebuildAll()"></select></div>
+        <div class="fr"><span class="fl">Estado</span><select class="fsel" id="cEst" onchange="rebuildAll()"></select></div>
+        <div class="fr"><span class="fl">Precio</span><select class="fsel" id="cPr"></select></div>
+        <div class="fr"><span class="fl">Sub-estado</span><select class="fsel" id="cSub" onchange="rebuildAll()"><option value="">Ninguno</option></select></div>
+        <div style="height:1px;background:var(--bdr2);margin:8px 0"></div>
+        <div class="fr"><span class="fl">Financiamiento</span><select class="fsel" id="cPay" onchange="rebuildAll()"><option value="">Ninguno</option></select></div>
+        <div class="fr"><span class="fl">Cuotas</span><select class="fsel" id="cPayS" onchange="rebuildAll()"><option value="">Ninguno</option></select></div>
+        <div id="matchMsg"></div>
+      </div>
+      <div class="sec" id="colorSec" style="display:none"><div class="sec-t">Personalizacion de colores</div><div id="colorRows"></div></div>
+      <div class="sec"><div class="sec-t">Estructura recomendada</div><div class="guide"><b>Columnas Excel:</b><br><code>lote_id</code> mismo valor que el id del SVG<br><code>estado</code> Disponible, Vendido, Reservado<br><code>precio</code> valor numerico<br><code>financiamiento</code> Directo, Contado<br><b>SVG:</b> cada lote con id="LOTE-001"</div></div>
+    </div>
+  </div>
+</div>
+<div class="mask" id="tblMask" onclick="if(event.target===this)closeTbl()">
+  <div class="modal lg" style="display:flex;flex-direction:column">
+    <div class="tbl-hd"><div class="tbl-ttl">Tabla de lotes <span class="tbl-cnt" id="tblCnt"></span></div><input class="fi" id="tsrch" placeholder="Buscar..." oninput="renderTbl()" style="width:200px"><select class="fi" id="tsfil" onchange="renderTbl()" style="width:130px"><option value="">Todos los estados</option></select><select class="fi" id="tsfilP" onchange="renderTbl()" style="width:150px;display:none"><option value="">Todo financiamiento</option></select><button class="tb-btn" onclick="closeTbl()">Cerrar</button></div>
+    <div class="tbl-wr"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="/src/main.js"></script>
+</body>
+</html>
