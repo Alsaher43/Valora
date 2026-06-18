@@ -1,4 +1,9 @@
 'use strict';
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://nkcytprsuoldgiajzfqg.supabase.co";
+const supabaseKey = "TU_CLAVE_PUBLICABLE";
+const supabase = createClient(supabaseUrl, supabaseKey);
 const BRAND={name:'VALORA',logo:{light:{icon:null},dark:{icon:null}}};
 const MIN_Z=.03,MAX_Z=20,ZF=1.18;
 const PAL=['#10B981','#EF4444','#F59E0B','#3B82F6','#8b5cf6','#0891b2','#db2777','#65a30d','#ea580c','#0f766e'];
@@ -19,7 +24,25 @@ function initLogos(){[$('lBrandLogo'),$('lCardLogo')].forEach(e=>{if(e)e.innerHT
 function applyTheme(t){S.theme=t;document.body.setAttribute('data-theme',t);try{localStorage.setItem('valora-theme',t);}catch(e){}const btn=$('themeBtn');if(btn)btn.innerHTML=t==='dark'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';const tb=$('tbLogo');if(tb)tb.innerHTML=logoHTML(18,t==='dark');}
 function toggleTheme(){applyTheme(S.theme==='dark'?'light':'dark');}
 function initLoginCards(){const g=$('fcGrid');if(g){g.innerHTML='';for(let i=0;i<35;i++)g.appendChild(mk('div','fc-cell'));const up=()=>{Array.from(g.children).forEach(c=>{c.className='fc-cell';const r=Math.random();if(r<.5)c.classList.add('g');else if(r<.78)c.classList.add('r');else if(r<.9)c.classList.add('a');else if(r<.95)c.classList.add('b');});};up();setInterval(up,2400);}const n=$('fcNum');if(n){let cur=0;const iv=setInterval(()=>{cur+=64;if(cur>=2847){cur=2847;clearInterval(iv);}n.textContent=cur.toLocaleString();},22);}const lv=$('loginView');if(lv){const cards=lv.querySelectorAll('.lfc'),card=lv.querySelector('.lcard');lv.addEventListener('mousemove',e=>{const r=lv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;cards.forEach((c,i)=>{const d=(i+1)*6;c.style.transform='translate('+x*d+'px,'+y*d+'px)';});if(card)card.style.transform='translate('+x*2+'px,'+y*2+'px)';});lv.addEventListener('mouseleave',()=>{cards.forEach(c=>c.style.transform='');if(card)card.style.transform='';});}[$('logEmail'),$('logPass')].forEach(el=>{if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});});}
-function doLogin(asGuest){const em=($('logEmail')?.value||'demo@valora.com').trim();if(asGuest){S.user={name:'Invitado',init:'IN'};}else{const name=em.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());S.user={name,init:name.split(' ').map(w=>w[0]).filter(Boolean).slice(0,2).join('').toUpperCase()||'US'};}const nu=$('navUser');if(nu)nu.textContent=S.user.init;$('loginView').style.display='none';$('appShell').style.display='flex';initLogos();applyTheme(S.theme);updateGreeting();logActivity('login','Sesion iniciada','<b>'+S.user.name+'</b> ingreso a VALORA','b');renderDashboard();renderHistory();}
+async function doLogin() {
+
+  const email = document.getElementById("logEmail").value;
+  const password = document.getElementById("logPass").value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert("Correo o contraseña incorrectos");
+    return;
+  }
+
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("appShell").style.display = "block";
+}
+window.doLogin = doLogin;
 function doLogout(){if(!confirm('Cerrar sesion de VALORA?'))return;$('loginView').style.display='flex';$('appShell').style.display='none';}
 function updateGreeting(){const h=new Date().getHours(),g=h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches';$('greetTxt').textContent=g+', '+S.user.name.split(' ')[0];$('dateTxt').textContent=new Date().toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase());}
 function switchView(v){S.view=v;['dash','map','hist'].forEach(n=>{const el=$(n+'View');if(el)el.style.display=n===v?'flex':'none';});document.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on',b.dataset.view===v));const cc=$('crumbCur');if(cc)cc.textContent={dash:'Dashboard',map:'Visualizador',hist:'Actividad'}[v]||v;if(v==='dash')renderDashboard();if(v==='hist')renderHistory();if(v==='map'&&S.svgEl)setTimeout(()=>applyT(),50);}
