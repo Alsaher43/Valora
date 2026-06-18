@@ -2,7 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://nkcytprsuoldgiajzfqg.supabase.co";
-const supabaseKey = "TU_CLAVE_PUBLICABLE";
+const supabaseKey = "sb_publishable_HtpuYp-RsiCB-cpMy1007A__8Kp0N1o";
 const supabase = createClient(supabaseUrl, supabaseKey);
 const BRAND={name:'VALORA',logo:{light:{icon:null},dark:{icon:null}}};
 const MIN_Z=.03,MAX_Z=20,ZF=1.18;
