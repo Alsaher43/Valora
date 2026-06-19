@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const BRAND={name:'VALORA',logo:{light:{icon:null},dark:{icon:null}}};
 const MIN_Z=.03,MAX_Z=20,ZF=1.18;
 const PAL=['#10B981','#EF4444','#F59E0B','#3B82F6','#8b5cf6','#0891b2','#db2777','#65a30d','#ea580c','#0f766e'];
-const DEF={disponible:'#10B981',libre:'#10B981',vendido:'#EF4444',reservado:'#F59E0B',separado:'#F59E0B',bloqueado:'#94a3b8',contado:'#10B981','financiamiento directo':'#3B82F6',financiamiento:'#3B82F6',directo:'#3B82F6'};
+const DEF={disponible:'#10B981',libre:'#10B981',vhendido:'#EF4444',reservado:'#F59E0B',separado:'#F59E0B',bloqueado:'#94a3b8',contado:'#10B981','financiamiento directo':'#3B82F6',financiamiento:'#3B82F6',directo:'#3B82F6'};
 const S={rows:[],rowById:{},svgEl:null,lotMap:{},dims:{w:800,h:600},sc:{},gc:{},gsc:{},cam:{x:0,y:0,z:1,r:0},drag:{on:false},tdist:0,filter:null,exp:new Set(),tab:null,hlEl:null,selLot:null,raf:null,pi:0,user:{name:'Demo',init:'DU'},view:'dash',activity:[],theme:'light',fpCol:false,sort:{col:null,dir:0},page:0};
 let FPD={on:false,ox:0,oy:0};
 const $=id=>document.getElementById(id);
@@ -40,7 +40,9 @@ async function doLogin() {
   }
 
   document.getElementById("loginView").style.display = "none";
-  document.getElementById("appShell").style.display = "block";
+  document.getElementById("appShell").style.display = "flex";
+    updateGreeting();
+    switchView('dash');
 }
 window.doLogin = doLogin;
 function doLogout(){if(!confirm('Cerrar sesion de VALORA?'))return;$('loginView').style.display='flex';$('appShell').style.display='none';}
